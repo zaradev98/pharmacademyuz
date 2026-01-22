@@ -45,6 +45,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
 
   // QR code text formatting (pretty multiline)
   const formatQRText = () => {
+    
     const lines = [];
     if (formData.fullName) lines.push(`1. F.I.SH: ${formData.fullName.toUpperCase()}`);
     if (formData.certNumber) lines.push(`2. SERTIFIKAT RAQAMI: ${formData.certNumber}`);
@@ -80,7 +81,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
     link.download = `sertifikat_${formData.certNumber}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
-    
+
   };
 
   const downloadAsPDF = async () => {
