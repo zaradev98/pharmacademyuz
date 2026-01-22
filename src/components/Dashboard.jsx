@@ -1,11 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
 import QRCode from 'qrcode'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 import { supabase } from '../supabaseClient'
 import './Dashboard.css'
+import './Certificate.css'
 
 export default function Dashboard() {
   const { user, logout, canManageUsers } = useAuth()
+  const certificateRef = useRef(null)
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     fullName: '',
     passport: '',
@@ -15,7 +21,10 @@ export default function Dashboard() {
     organizationName: '',
     validFrom: '',
     validTo: '',
-    verificationPhone: ''
+    verificationPhone: '',
+    durationYears: '', // Amal qilish muddati (yil)
+    hours: '',         // Soat
+    issueDate: ''      // Berilgan sana
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -24,8 +33,10 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false)
   const [showActionModal, setShowActionModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
+  const [currentQrDataURL, setCurrentQrDataURL] = useState('')
 
   useEffect(() => {
+    console.log(localStorage.getItem('certificateData'))
     loadHistory()
   }, [])
 
@@ -45,7 +56,6 @@ export default function Dashboard() {
 
   const formatQRText = () => {
     const parts = []
-
     if (formData.fullName) parts.push(`1. F.I.SH: ${formData.fullName.toUpperCase()}`)
     if (formData.passport) parts.push(`2. PASPORT MA'LUMOTLARI: ${formData.passport}`)
     if (formData.certificateNumber) parts.push(`3. SERTIFIKAT RAQAMI: ${formData.certificateNumber}`)
@@ -58,12 +68,10 @@ export default function Dashboard() {
     if (formData.verificationPhone) {
       parts.push(`8. SERTIFIKAT HAQIQIYLIGINI TEKSHIRISH UCHUN QUYIDAGI RAQAMGA MUROJAAT QILISHINGIZ MUMKIN: ${formData.verificationPhone}`)
     }
-
     return parts.join('\n')
   }
 
   const generateQRCode = async () => {
-    // Kamida bitta maydon to'ldirilganligini tekshirish
     if (!formData.fullName || !formData.certificateNumber) {
       setMessage('Iltimos, kamida F.I.SH va Sertifikat raqamini kiriting')
       return
@@ -73,59 +81,75 @@ export default function Dashboard() {
     setMessage('')
 
     try {
-      // QR kod uchun formatlangan matnni yaratish
       const qrText = formatQRText()
-
-      // QR kodni PNG sifatida generatsiya qilish
       const qrDataURL = await QRCode.toDataURL(qrText, {
         width: 400,
         margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
+        color: { dark: '#000000', light: '#FFFFFF' }
       })
 
-      // Data URL ni Blob ga o'zgartirish
-      const response = await fetch(qrDataURL)
-      const blob = await response.blob()
+      setCurrentQrDataURL(qrDataURL)
+      await new Promise(resolve => setTimeout(resolve, 100))
 
-      // Fayl nomini yaratish
-      const fileName = `qr_${Date.now()}.png`
-      const file = new File([blob], fileName, { type: 'image/png' })
+      if (certificateRef.current) {
+        const canvas = await html2canvas(certificateRef.current, {
+          width: 3543,
+          height: 2480,
+          scale: 1,
+          useCORS: true,
+          allowTaint: true
+        })
+        const certificateBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
 
-      // Supabase storage ga yuklash
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('qrcodes')
-        .upload(`${user.id}/${fileName}`, file)
+        const certFileName = `cert_${Date.now()}.png`
+        const certFile = new File([certificateBlob], certFileName, { type: 'image/png' })
 
-      if (uploadError) throw uploadError
+        const { error: certUploadError } = await supabase.storage
+          .from('qrcodes')
+          .upload(`${user.id}/${certFileName}`, certFile)
 
-      // Public URL olish
-      const { data: urlData } = supabase.storage
-        .from('qrcodes')
-        .getPublicUrl(`${user.id}/${fileName}`)
+        if (certUploadError) throw certUploadError
 
-      // Process jadvaliga ma'lumot yozish
-      const { data: processData, error: processError } = await supabase
-        .from('process')
-        .insert([
-          {
+        const { data: certUrlData } = supabase.storage
+          .from('qrcodes')
+          .getPublicUrl(`${user.id}/${certFileName}`)
+
+        const qrResponse = await fetch(qrDataURL)
+        const qrBlob = await qrResponse.blob()
+        const qrFileName = `qr_${Date.now()}.png`
+        const qrFile = new File([qrBlob], qrFileName, { type: 'image/png' })
+
+        const { data: qrUploadData, error: qrUploadError } = await supabase.storage
+          .from('qrcodes')
+          .upload(`${user.id}/${qrFileName}`, qrFile)
+
+        if (qrUploadError) throw qrUploadError
+
+        const { data: qrUrlData } = supabase.storage
+          .from('qrcodes')
+          .getPublicUrl(`${user.id}/${qrFileName}`)
+
+        const { error: processError } = await supabase
+          .from('process')
+          .insert([{
             user_id: user.id,
             qr_text: qrText,
-            qr_image_url: urlData.publicUrl,
+            qr_image_url: qrUrlData.publicUrl,
+            certificate_image_url: certUrlData.publicUrl,
             title: formData.fullName || 'Sertifikat',
             description: `Sertifikat: ${formData.certificateNumber}`,
-            file_path: uploadData.path
-          }
-        ])
-        .select()
-        .single()
+            file_path: qrUploadData.path
+          }])
+          .select()
+          .single()
 
-      if (processError) throw processError
+        if (processError) throw processError
 
-      setMessage('QR kod muvaffaqiyatli yaratildi!')
-      // Formani tozalash
+        setMessage('QR kod va sertifikat muvaffaqiyatli yaratildi!')
+      } else {
+        throw new Error('Sertifikat komponenti topilmadi')
+      }
+
       setFormData({
         fullName: '',
         passport: '',
@@ -135,10 +159,12 @@ export default function Dashboard() {
         organizationName: '',
         validFrom: '',
         validTo: '',
-        verificationPhone: ''
+        verificationPhone: '',
+        durationYears: '',
+        hours: '',
+        issueDate: ''
       })
 
-      // Modalni yopish va tarixni yangilash
       setShowModal(false)
       loadHistory()
       setTimeout(() => setMessage(''), 3000)
@@ -168,7 +194,6 @@ export default function Dashboard() {
   }
 
   const handleRowClick = (item, e) => {
-    // Context menu'ni oldini olish
     e.preventDefault()
     setSelectedItem(item)
     setShowActionModal(true)
@@ -179,9 +204,11 @@ export default function Dashboard() {
     setSelectedItem(null)
   }
 
+
   const handleDownloadClick = () => {
     if (selectedItem) {
-      handleDownload(selectedItem.qr_image_url, selectedItem.title)
+      // Instead of downloading, navigate to /view-certificate with data
+      navigate('/view-certificate', { state: { data: selectedItem } })
       closeActionModal()
     }
   }
@@ -193,38 +220,104 @@ export default function Dashboard() {
     }
   }
 
-  const handleDownload = async (qrImageUrl, title) => {
-    try {
-      const response = await fetch(qrImageUrl)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `${title.replace(/[^a-z0-9]/gi, '_')}_qr.png`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
-      setMessage('QR kod yuklab olindi!')
-      setTimeout(() => setMessage(''), 3000)
-    } catch (error) {
-      console.error('Yuklab olishda xatolik:', error)
-      setMessage('Yuklab olishda xatolik yuz berdi')
+  const handleShowCertificate = () => {
+    if (selectedItem) {
+      openCertificateHTML(selectedItem)
     }
+  }
+
+  const openCertificateHTML = (item) => {
+    const lines = item.qr_text.split('\n')
+    let fullName = '', certificateNumber = '', registrationNumber = ''
+    let diplomaNumber = '', organizationName = '', validFrom = '', validTo = ''
+
+    lines.forEach(line => {
+      if (line.includes('F.I.SH:')) fullName = line.split('F.I.SH:')[1].trim()
+      else if (line.includes('SERTIFIKAT RAQAMI:')) certificateNumber = line.split('SERTIFIKAT RAQAMI:')[1].trim()
+      else if (line.includes('QAYD RAQAMI:')) registrationNumber = line.split('QAYD RAQAMI:')[1].trim()
+      else if (line.includes('DIPLOM RAQAMI:')) diplomaNumber = line.split('DIPLOM RAQAMI:')[1].trim()
+      else if (line.includes('YO\'NALISH NOMI:')) organizationName = line.split('YO\'NALISH NOMI:')[1].trim()
+      else if (line.includes('MUDDATI:')) {
+        const dates = line.split('MUDDATI:')[1].trim().split('-')
+        if (dates.length === 2) {
+          validFrom = dates[0].trim()
+          validTo = dates[1].trim()
+        }
+      }
+    })
+
+    const years = validFrom && validTo ?
+      new Date(validTo.split('.').reverse().join('-')).getFullYear() -
+      new Date(validFrom.split('.').reverse().join('-')).getFullYear() : '5'
+
+  }
+
+  // handleDownload now opens /view-certificate in a new tab and passes data via sessionStorage
+  const handleDownload = (qrImageUrl, title, item) => {
+    // Try to parse qr_text as JSON (new format)
+    let certData = {};
+    try {
+      certData = JSON.parse(item.qr_text);
+      // Add extra fields from item if not present in qr_text
+      certData.qrImageUrl = item.qr_image_url || '';
+      certData.directorName = certData.directorName || "I.M. Fayzullo o'g'li";
+      certData.certificateNumber = certData.certificateNumber || (item.description ? item.description.replace('Sertifikat: ', '') : '');
+    } catch (e) {
+      // Fallback: old text format
+      let durationYears = '';
+      let studyPeriod = '';
+      let hours = '';
+      let issueDate = '';
+      if (item.qr_text) {
+        const lines = item.qr_text.split('\n');
+        lines.forEach(line => {
+          if (line.includes('MUDDATI:')) {
+            const dates = line.split('MUDDATI:')[1].trim().split('-');
+            if (dates.length === 2) {
+              studyPeriod = dates[0].trim() + ' - ' + dates[1].trim();
+              const from = dates[0].trim().split('.').reverse().join('-');
+              const to = dates[1].trim().split('.').reverse().join('-');
+              durationYears = String(new Date(to).getFullYear() - new Date(from).getFullYear());
+            }
+          }
+          if (line.match(/soat/gi)) {
+            const match = line.match(/(\d+)\s*soat/);
+            if (match) hours = match[1];
+          }
+          if (line.match(/Ro'yxatga olingan sana|Berilgan sana/gi)) {
+            const match = line.match(/(\d{2}\.\d{2}\.\d{4})/);
+            if (match) issueDate = match[1];
+          }
+        });
+      }
+      certData = {
+        fullName: item.title,
+        certificateNumber: item.certificateNumber || (item.description ? item.description.replace('Sertifikat: ', '') : ''),
+        diplomaNumber: item.diplomaNumber || '',
+        registrationNumber: item.registrationNumber || '',
+        organizationName: item.organizationName || '',
+        validFrom: item.validFrom || '',
+        validTo: item.validTo || '',
+        durationYears,
+        studyPeriod,
+        hours,
+        issueDate,
+        directorName: "I.M. Fayzullo o'g'li",
+        qrImageUrl: item.qr_image_url || '',
+      };
+    }
+    sessionStorage.setItem('viewCertificateData', JSON.stringify(certData));
+    window.open('/view-certificate', '_blank');
   }
 
   const handleDelete = async (item) => {
     try {
-      // Storage dan faylni o'chirish
       const { error: storageError } = await supabase.storage
         .from('qrcodes')
         .remove([item.file_path])
 
-      if (storageError) {
-        console.error('Storage xatosi:', storageError)
-      }
+      if (storageError) console.error('Storage xatosi:', storageError)
 
-      // Database dan o'chirish
       const { error: dbError } = await supabase
         .from('process')
         .delete()
@@ -250,15 +343,11 @@ export default function Dashboard() {
             <rect x="14" y="3" width="7" height="7"/>
             <rect x="3" y="14" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/>
-            <rect x="6" y="6" width="1" height="1"/>
-            <rect x="17" y="6" width="1" height="1"/>
-            <rect x="6" y="17" width="1" height="1"/>
-            <rect x="17" y="17" width="1" height="1"/>
           </svg>
           <span>QR Generator</span>
         </div>
         <div className="nav-right">
-          {canManageUsers(user.role) && (
+          {canManageUsers && canManageUsers(user?.role) && (
             <a href="/users" className="btn-icon-nav" title="Foydalanuvchilar">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -285,149 +374,14 @@ export default function Dashboard() {
       )}
 
       <div className="dashboard-content">
-        {showModal && (
-          <div className="modal-overlay" onClick={() => setShowModal(false)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h2>Yangi Sertifikat QR Kod</h2>
-                <button onClick={() => setShowModal(false)} className="btn-close">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>F.I.SH (To'liq ism) *</label>
-                    <input
-                      type="text"
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      placeholder="Mamanazarov Saydulla Turayevich"
-                      disabled={loading}
-                      required
-                    />
-                  </div>
+        {/* QR kod yaratish endi CertificateGenerator.jsx orqali bo'ladi */}
 
-                  <div className="form-group">
-                    <label>Pasport ma'lumotlari</label>
-                    <input
-                      type="text"
-                      value={formData.passport}
-                      onChange={(e) => setFormData({ ...formData, passport: e.target.value })}
-                      placeholder="AD5690631"
-                      disabled={loading}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Sertifikat raqami *</label>
-                    <input
-                      type="text"
-                      value={formData.certificateNumber}
-                      onChange={(e) => setFormData({ ...formData, certificateNumber: e.target.value.toUpperCase() })}
-                      placeholder="GPP/3-000050"
-                      disabled={loading}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Qayd raqami</label>
-                    <input
-                      type="text"
-                      value={formData.registrationNumber}
-                      onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value })}
-                      placeholder="00050"
-                      disabled={loading}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Diplom raqami</label>
-                    <input
-                      type="text"
-                      value={formData.diplomaNumber}
-                      onChange={(e) => setFormData({ ...formData, diplomaNumber: e.target.value })}
-                      placeholder="K № 0993176"
-                      disabled={loading}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Yo'nalish nomi</label>
-                    <input
-                      type="text"
-                      value={formData.organizationName}
-                      onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
-                      placeholder="ZARUR DORIXONA AMALIYOTI (GPP)"
-                      disabled={loading}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Amal qilish muddati (boshlanishi)</label>
-                    <input
-                      type="date"
-                      value={formData.validFrom}
-                      onChange={(e) => setFormData({ ...formData, validFrom: e.target.value })}
-                      disabled={loading}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Amal qilish muddati (tugashi)</label>
-                    <input
-                      type="date"
-                      value={formData.validTo}
-                      onChange={(e) => setFormData({ ...formData, validTo: e.target.value })}
-                      disabled={loading}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Tekshirish uchun telefon raqami</label>
-                  <input
-                    type="text"
-                    value={formData.verificationPhone}
-                    onChange={(e) => setFormData({ ...formData, verificationPhone: e.target.value })}
-                    placeholder="+998883033416"
-                    disabled={loading}
-                  />
-                </div>
-
-                <button
-                  onClick={generateQRCode}
-                  disabled={loading}
-                  className="btn-primary"
-                >
-                  {loading ? 'Yaratilmoqda...' : 'QR Kod Yaratish'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Floating Action Button */}
-        <button onClick={() => setShowModal(true)} className="fab" title="Yangi QR kod yaratish">
+        <button onClick={() => navigate('/certificate-generator')} className="fab" title="Yangi QR kod yaratish">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="3" width="7" height="7"/>
             <rect x="14" y="3" width="7" height="7"/>
             <rect x="3" y="14" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/>
-            <rect x="6" y="6" width="1" height="1"/>
-            <rect x="17" y="6" width="1" height="1"/>
-            <rect x="6" y="17" width="1" height="1"/>
-            <rect x="17" y="17" width="1" height="1"/>
           </svg>
         </button>
 
@@ -462,11 +416,7 @@ export default function Dashboard() {
                 </thead>
                 <tbody>
                   {filteredHistory.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      onClick={(e) => handleRowClick(item, e)}
-                      onContextMenu={(e) => e.preventDefault()}
-                    >
+                    <tr key={item.id} onClick={(e) => handleRowClick(item, e)} onContextMenu={(e) => e.preventDefault()}>
                       <td className="text-center">{index + 1}</td>
                       <td>
                         <div className="table-info-stack">
@@ -485,23 +435,18 @@ export default function Dashboard() {
                       </td>
                       <td className="action-buttons-desktop">
                         <div className="action-buttons">
+                         
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleDownload(item.qr_image_url, item.title)
-                            }}
+                            onClick={(e) => { e.stopPropagation(); handleDownload(item.qr_image_url, item.title, item); }}
                             className="btn-icon btn-download-icon"
-                            title="Yuklab olish"
+                            title="QR kod yuklab olish"
                           >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
                             </svg>
                           </button>
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleDelete(item)
-                            }}
+                            onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
                             className="btn-icon btn-delete-icon"
                             title="O'chirish"
                           >
@@ -519,7 +464,6 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* Action Modal */}
         {showActionModal && selectedItem && (
           <div className="modal-overlay" onClick={closeActionModal}>
             <div className="action-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -539,12 +483,18 @@ export default function Dashboard() {
                   </svg>
                   Yuklab olish
                 </button>
+                <button onClick={handleShowCertificate} className="action-modal-btn action-modal-btn-certificate">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path d="M8 6h8M8 10h8M8 14h6"/>
+                  </svg>
+                  Sertifikatni ko'rish
+                </button>
                 <button onClick={handleDeleteClick} className="action-modal-btn action-modal-btn-delete">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>
                   </svg>
                   O'chirish
-                  
                 </button>
               </div>
             </div>

@@ -1,180 +1,230 @@
-# QR Code Generator - React + Supabase
+# QR Sertifikat Yaratish Tizimi
 
-Bu loyiha React (Vite) va Supabase yordamida QR kod yaratish ilovasidir.
+Farmatsevtika akademiyasi uchun QR kodli sertifikatlar yaratish tizimi.
 
-## Xususiyatlar
+## 📋 Tizim haqida
 
-- ✅ Foydalanuvchi ro'yxatdan o'tish va kirish (bcrypt bilan hashlab)
-- ✅ QR kod yaratish va PNG/JPG formatda saqlash
-- ✅ QR kodlarni Supabase Storage ga yuklash
-- ✅ QR kodlar tarixini ko'rish
-- ✅ Profilda login va parolni tahrirlash
-- ✅ Supabase database bilan integratsiya
+Bu tizim **faqat xodimlar uchun**. Sertifikat oluvchilar saytga kirmaydi, ularga PNG formatda tayyor sertifikat beriladi.
 
-## Texnologiyalar
+### Kim foydalanadi?
 
-- React 18
-- Vite
-- Supabase (Database + Storage)
-- QRCode library
-- bcryptjs (parollarni hashlash)
-- React Router DOM
+1. **Superadmin** - Barcha huquqlar, user yaratish
+2. **Admin** - Faqat oddiy userlar yaratish
+3. **User (Xodim)** - Faqat sertifikat yaratish
 
-## O'rnatish
+### Sertifikat oluvchilar
 
-### 1. Repository ni clone qiling
+- ❌ Saytga kirmaydi
+- ❌ Login/parol yo'q
+- ✅ Tayyor PNG sertifikatni oladi
+- ✅ QR kod orqali tekshirish mumkin
+
+## 🚀 Tez boshlash
+
+### 1. O'rnatish
 
 ```bash
-cd qr-app
 npm install
 ```
 
-### 2. Supabase loyihasi yaratish
+### 2. Environment setup
 
-1. https://supabase.com ga o'ting
-2. Yangi loyiha yarating
-3. Loyiha URL va Anon Key ni oling
-
-### 3. Environment variables sozlash
-
-`.env` fayl yarating va quyidagilarni kiriting:
+`.env` faylini yarating:
 
 ```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key-here
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-### 4. Supabase Database sozlash
+### 3. Database setup
 
-1. Supabase Dashboard > SQL Editor ga o'ting
-2. `supabase-setup.sql` faylidagi barcha SQL kodlarni nusxalang
-3. SQL Editor da ishga tushiring
+Supabase SQL Editor'da:
 
-### 5. Supabase Storage sozlash
+1. `database-setup.sql` ni ishga tushiring
+2. `update-database.sql` ni ishga tushiring
 
-1. Supabase Dashboard > Storage ga o'ting
-2. "Create a new bucket" tugmasini bosing
-3. Bucket nomini `qrcodes` deb kiriting
-4. "Public bucket" ni tanlang va yarating
+### 4. Storage setup
 
-### 6. Ilovani ishga tushirish
+Supabase Dashboard > Storage:
+- Bucket nomi: `qrcodes`
+- Public: ✅ Ha
+
+### 5. Rasm fayli
+
+`public/rasm.jpg` - sertifikat foni (sizning shablon rasmingiz)
+
+### 6. Ishga tushirish
 
 ```bash
 npm run dev
 ```
 
-Brauzerda `http://localhost:5173` manzilida ochiladi.
+## 🔐 Kirish ma'lumotlari
 
-## Database Struktura
+**Default Superadmin:**
+- Username: `pharmacademyuz01`
+- Password: `900411134`
 
-### Users jadvali
+## 📱 Qanday ishlaydi?
 
-```sql
-- id (UUID, primary key)
-- username (VARCHAR, unique)
-- password_hash (TEXT)
-- full_name (VARCHAR)
-- created_at (TIMESTAMP)
-- updated_at (TIMESTAMP)
-```
+### Xodim tomonidan
 
-### Process jadvali
+1. Login qilish
+2. Dashboard'da "+" tugmasini bosish
+3. Ma'lumotlarni to'ldirish:
+   - F.I.SH
+   - Pasport ma'lumotlari
+   - Sertifikat raqami
+   - Qayd raqami
+   - Diplom raqami
+   - Yo'nalish nomi
+   - Amal qilish muddati
+   - Tekshirish telefoni
+4. "QR Kod Yaratish" tugmasini bosish
+5. Sertifikatni yuklab olish (PNG)
+6. PNG faylni sertifikat oluvchiga berish
 
-```sql
-- id (UUID, primary key)
-- user_id (UUID, foreign key)
-- qr_text (TEXT)
-- qr_image_url (TEXT)
-- file_path (TEXT)
-- title (VARCHAR)
-- description (TEXT)
-- created_at (TIMESTAMP)
-- updated_at (TIMESTAMP)
-```
+### Sertifikat oluvchi tomonidan
 
-## Loyihaning Strukturasi
+1. PNG faylni oladi
+2. Chop etadi yoki saqlaydi
+3. QR kodni skan qilganda barcha ma'lumotlarni ko'radi
+
+## 🎯 Funksiyalar
+
+### Dashboard
+
+- ✅ Sertifikat yaratish
+- ✅ Tarix ko'rish (barcha sertifikatlar)
+- ✅ Qidiruv (F.I.SH, sertifikat raqami)
+- ✅ Sertifikat yuklab olish (PNG)
+- ✅ QR kod yuklab olish (PNG)
+- ✅ O'chirish
+
+### Sertifikat
+
+- ✅ To'liq ma'lumotlar
+- ✅ QR kod ichida
+- ✅ Professional dizayn
+- ✅ Yuqori sifat (3543x2380px)
+- ✅ Times New Roman font
+- ✅ PNG format
+
+### User Management (Superadmin/Admin)
+
+- ✅ Yangi user yaratish
+- ✅ User ma'lumotlarini ko'rish
+- ✅ Active/Inactive qilish
+- ✅ Role-based access
+
+## 🏗️ Texnologiyalar
+
+- **Frontend:** React 19 + Vite
+- **Backend:** Supabase (PostgreSQL + Storage)
+- **Auth:** Custom auth with bcrypt
+- **QR Code:** qrcode library
+- **HTML to PNG:** html2canvas
+- **Routing:** React Router v7
+
+## 📁 Loyiha strukturasi
 
 ```
 qr-app/
+├── public/
+│   └── rasm.jpg              # Sertifikat foni
 ├── src/
 │   ├── components/
-│   │   ├── Login.jsx           # Kirish sahifasi
-│   │   ├── Register.jsx        # Ro'yxatdan o'tish
-│   │   ├── Dashboard.jsx       # QR kod yaratish
-│   │   ├── Profile.jsx         # Profil tahrirlash
-│   │   ├── ProtectedRoute.jsx  # Route himoyasi
-│   │   ├── Auth.css            # Auth sahifalar CSS
-│   │   ├── Dashboard.css       # Dashboard CSS
-│   │   └── Profile.css         # Profile CSS
-│   ├── AuthContext.jsx         # Auth context
-│   ├── supabaseClient.js       # Supabase konfiguratsiya
-│   ├── App.jsx                 # Asosiy App
-│   ├── App.css                 # Global CSS
-│   └── main.jsx                # Entry point
-├── supabase-setup.sql          # Database setup
-├── .env.example                # Environment variables namunasi
-└── package.json
+│   │   ├── Certificate.jsx   # Sertifikat komponenti
+│   │   ├── Dashboard.jsx     # Asosiy sahifa
+│   │   ├── Login.jsx         # Login sahifasi
+│   │   ├── Profile.jsx       # Profil
+│   │   ├── UserManagement.jsx # User boshqaruv
+│   │   └── ProtectedRoute.jsx # Route himoyasi
+│   ├── AuthContext.jsx       # Auth holati
+│   ├── supabaseClient.js     # Supabase client
+│   └── App.jsx               # Asosiy App
+├── database-setup.sql        # Database yaratish
+├── update-database.sql       # Database yangilash
+└── SETUP-INSTRUCTIONS.md     # To'liq yo'riqnoma
 ```
 
-## Foydalanish
+## 🔒 Xavfsizlik
 
-### 1. Ro'yxatdan o'tish
-- `/register` sahifasiga o'ting
-- To'liq ismingiz, foydalanuvchi nomi va parolni kiriting
-- "Ro'yxatdan o'tish" tugmasini bosing
+- ✅ Barcha sahifalar login majburiy
+- ✅ Row Level Security (RLS)
+- ✅ Parollar bcrypt bilan hash
+- ✅ Role-based access control
+- ✅ Protected routes
 
-### 2. Kirish
-- `/login` sahifasiga o'ting
-- Foydalanuvchi nomi va parolni kiriting
-- "Kirish" tugmasini bosing
+## 🐛 Muammolarni bartaraf qilish
 
-### 3. QR Kod Yaratish
-- Dashboard da QR kod uchun matn kiriting (URL, matn, va h.k.)
-- Sarlavha va tavsif qo'shing (ixtiyoriy)
-- "QR Kod Yaratish" tugmasini bosing
-- QR kod PNG formatda Supabase Storage ga yuklanadi
+### User_id xatoligi
 
-### 4. Profil Tahrirlash
-- Profil sahifasiga o'ting
-- Ismingiz yoki username ni o'zgartiring
-- Parolni o'zgartirish uchun joriy va yangi parolni kiriting
-- "Saqlash" tugmasini bosing
-
-## Xavfsizlik
-
-- Parollar bcrypt yordamida hashlanadi (salt rounds: 10)
-- Row Level Security (RLS) yoqilgan
-- Har bir foydalanuvchi faqat o'z ma'lumotlarini ko'radi va tahrirlaydi
-
-## Production uchun Tayyorlash
-
-```bash
-npm run build
+```sql
+ALTER TABLE process ALTER COLUMN user_id DROP NOT NULL;
 ```
-
-Build fayllar `dist/` papkasida hosil bo'ladi.
-
-## Muammolarni bartaraf etish
-
-### Supabase ulanish xatosi
-- `.env` faylidagi URL va Key ni tekshiring
-- Supabase loyihangiz faol ekanligini tekshiring
 
 ### Storage xatosi
-- `qrcodes` bucket yaratilganligini tekshiring
-- Bucket public ekanligini tekshiring
-- Storage policies to'g'ri sozlanganligini tekshiring
 
-### Database xatosi
-- SQL setup to'liq bajarilganligini tekshiring
-- RLS policies to'g'ri sozlanganligini tekshiring
+```sql
+UPDATE storage.buckets SET public = true WHERE id = 'qrcodes';
+```
 
-## Qo'shimcha Ma'lumot
+### Login ishlamayapti
 
-- Supabase Docs: https://supabase.com/docs
-- React Docs: https://react.dev
-- QRCode Library: https://www.npmjs.com/package/qrcode
+localStorage'ni tozalash:
+```javascript
+localStorage.clear()
+```
 
-## Litsenziya
+## 📦 Deployment
+
+### Vercel
+
+```bash
+vercel
+```
+
+Environment variables:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+### Netlify
+
+```bash
+netlify deploy --prod
+```
+
+## 📝 To-do
+
+- [ ] Sertifikat shablonlarini qo'shish
+- [ ] Email orqali yuborish
+- [ ] Bulk sertifikat yaratish
+- [ ] Statistika dashboard
+- [ ] Export Excel/PDF
+
+## 👥 Role Permissions
+
+| Funksiya | Superadmin | Admin | User |
+|----------|-----------|-------|------|
+| Sertifikat yaratish | ✅ | ✅ | ✅ |
+| Sertifikat ko'rish | ✅ | ✅ | ✅ |
+| Sertifikat o'chirish | ✅ | ✅ | ✅ |
+| User yaratish | ✅ | ✅ (faqat user) | ❌ |
+| User boshqarish | ✅ | ✅ | ❌ |
+| Profil tahrirlash | ✅ | ✅ | ✅ |
+
+## 📞 Support
+
+Muammo bo'lsa yoki savol bo'lsa:
+1. Issues yaratish
+2. README.md ni o'qish
+3. SETUP-INSTRUCTIONS.md ni ko'rish
+
+## 📄 License
 
 MIT
+
+---
+
+**Eslatma:** Bu tizim faqat ichki foydalanish uchun. Sertifikat oluvchilar saytga kirmaydi.

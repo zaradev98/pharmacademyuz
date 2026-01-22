@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.cert {
+  background-color: #ffffff;
+  width: 3543px;
+  height: 2380px;
+  position: relative;
+}
+
+.cert .rasm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3543px;
+  height: 2380px;
+  object-fit: cover;
+}
+
+/* Elementlarni fixed pixel pozitsiyalarda joylash */
+.cert > div {
+  position: absolute;
+  font-family: 'Times New Roman', serif;
+}
+
+.cert .gpp {
+  position: absolute;
+  top: 1050px;
+  left: 1385px;
+  width: 774px;
+  height: 95px;
+  font-size: 75px;
+  font-weight: 900;
+  letter-spacing: -3px;
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.cert .created-time {
+  position: absolute;
+  top: 2040px;
+  left: 780px;
+  width: 464px;
+  font-size: 55px;
+  font-weight: 600;
+  padding-top: 12px;
+  text-align: left;
+  background-color: #ffffff;
+}
+
+.cert .qayd-raqami {
+  position: absolute;
+  top: 1985px;
+  left: 2930px;
+  width: 305px;
+  height: 55px;
+  background-color: #fff;
+  font-size: 55px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.cert .srokyear {
+  position: absolute;
+  top: 2045px;
+  left: 3094px;
+  width: 50px;
+  height: 60px;
+  background-color: #fff;
+  font-size: 55px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.cert .srok {
+  position: absolute;
+  top: 1362px;
+  left: 1076px;
+  width: 636px;
+  height: 73px;
+  font-size: 55px;
+  font-weight: 600;
+  padding-top: 12px;
+  text-align: right;
+  background-color: #fff;
+}
+
+.cert .name {
+  position: absolute;
+  font-size: 75px;
+  text-align: center;
+  top: 1265px;
+  left: 236px;
+  width: 3071px;
+  font-weight: 600;
+  background-color: #fff;
+}
+
+.cert .diplom-number {
+  position: absolute;
+  top: 1142px;
+  left: 688px;
+  width: 605px;
+  height: 90px;
+  background-color: #fff;
+  font-size: 65px;
+  font-weight: bold;
+  padding-top: 8px;
+  text-align: right;
+}
+
+.cert .text-wrapper {
+  position: absolute;
+  top: 455px;
+  left: 2015px;
+  width: 480px;
+  font-weight: 500;
+  color: #000000;
+  background-color: #fff;
+  font-size: 65px;
+  text-align: right;
+}
+
+.cert .qrcode {
+  position: absolute;
+  top: 1644px;
+  left: 312px;
+  width: 406px;
+  height: 406px;
+  background-color: #ffffff;
+}
+
+.cert .qrcode img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cert .mavzu {
+  position: absolute;
+  top: 1435px;
+  left: 638px;
+  width: 2267px;
+  background-color: #fff;
+  font-size: 55px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Mobile uchun responsive emas - fixed hajm */
