@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -44,12 +44,24 @@ export default function ViewCertificate({ data = {}, onClose }) {
   };
   
   const formatQRText = () => {
-    // Eng qisqa URL - faqat view page'ga yo'naltirish
-    // Foydalanuvchi diplom raqamini kiritib, to'liq ma'lumotlarni ko'radi
+    // Test uchun turli xil URL formatlarini sinab ko'rish mumkin:
+
+    // Variant 1: To'liq URL (https bilan)
     const url = 'https://pharmacademyuz.vercel.app/view';
+
+    // Variant 2: HTTP (ba'zan qisqaroq bo'ladi, lekin xavfsizroq emas)
+    // const url = 'http://pharmacademyuz.vercel.app/view';
+
+    // Variant 3: Protokolsiz (eng qisqa, lekin ishlamasligi mumkin)
+    // const url = 'pharmacademyuz.vercel.app/view';
 
     console.log('QR Code URL:', url);
     console.log('URL length:', url.length);
+    console.log('URL characters:', url.length, 'chars');
+
+    // iOS uchun maxsus test
+    console.log('Testing iOS QR scan - URL should be:', url);
+
     return url;
   };
 
@@ -423,16 +435,16 @@ export default function ViewCertificate({ data = {}, onClose }) {
             {/* QR Code - Bottom Left */}
             <div style={{
               position: 'absolute',
-              bottom: '450px',
-              left: '330px',
-              width: '300px',
-              height: '300px',
+              bottom: '430px',
+              left: '310px',
+              width: '340px',
+              height: '340px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               background: '#fff',
               border: '2px solid #000',
-              padding: '15px'
+              padding: '20px'
             }}>
               {formData.qrImageUrl ? (
                 <img
@@ -446,12 +458,13 @@ export default function ViewCertificate({ data = {}, onClose }) {
                   onLoad={() => setQrReady(true)}
                 />
               ) : (
-                <QRCodeCanvas
+                <QRCodeSVG
                   value={formatQRText()}
-                  size={270}
+                  size={300}
                   bgColor="#ffffff"
                   fgColor="#000000"
                   level="L"
+                  marginSize={4}
                   style={{ width: '100%', height: '100%' }}
                 />
               )}
