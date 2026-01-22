@@ -291,7 +291,7 @@ export default function PublicViewPage() {
                 value={diplomaInput}
                 onChange={(e) => setDiplomaInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Masalan: K0993176"
+                placeholder="Masalan: K 0993176"
                 disabled={loading}
               />
               <button
