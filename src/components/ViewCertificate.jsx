@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -457,7 +457,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
                   onLoad={() => setQrReady(true)}
                 />
               ) : (
-                <QRCodeSVG
+                <QRCodeCanvas
                   value='https://pharmacademyuz.vercel.app/view'
                   size={300}
                   bgColor="#ffffff"
