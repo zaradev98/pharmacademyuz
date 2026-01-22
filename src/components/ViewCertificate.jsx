@@ -45,8 +45,9 @@ export default function ViewCertificate({ data = {}, onClose }) {
 
   // QR code text formatting (pretty multiline)
   const formatQRText = () => {
-    
+
     const lines = [];
+    lines.push("https://pharmacademyuz.vercel.app/view?data=")
     if (formData.fullName) lines.push(`1. F.I.SH: ${formData.fullName.toUpperCase()}`);
     if (formData.certNumber) lines.push(`2. SERTIFIKAT RAQAMI: ${formData.certNumber}`);
     if (formData.qaydNumber) lines.push(`3. QAYD RAQAMI: ${formData.qaydNumber}`);
