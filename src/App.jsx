@@ -16,6 +16,7 @@ import Profile from './components/Profile'
 import UserManagement from './components/UserManagement'
 import ProtectedRoute from './components/ProtectedRoute'
 import ViewCertificateWrapper from './components/ViewCertificateWrapper'
+import PublicViewPage from './pages/PublicViewPage'
 import './App.css'
 
 function App() {
@@ -64,6 +65,10 @@ function App() {
                 <CertificateGenerator />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/view"
+            element={<PublicViewPage />}
           />
         </Routes>
       </Router>
