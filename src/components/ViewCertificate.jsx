@@ -80,6 +80,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
     link.download = `sertifikat_${formData.certNumber}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
+    
   };
 
   const downloadAsPDF = async () => {
