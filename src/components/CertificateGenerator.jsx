@@ -52,6 +52,7 @@ export default function CertificateGenerator() {
         user_id: user.id,
         title: formData.fullName || 'Sertifikat',
         description: `Sertifikat: ${formData.certificateNumber}`,
+        diplom_number: formData.diplomaNumber, // Diplom raqamini saqlash
         qr_text: JSON.stringify(formData),
         qr_image_url: 'local',
         file_path:'local' // Keyinroq yangilanadi

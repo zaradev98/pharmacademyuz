@@ -42,22 +42,15 @@ export default function ViewCertificate({ data = {}, onClose }) {
     verificationPhone: source.verificationPhone || '',
     qrImageUrl: source.qr_image_url || source.qrImageUrl || '',
   };
-
-  // QR code text formatting (pretty multiline)
+  
   const formatQRText = () => {
+    // Eng qisqa URL - faqat view page'ga yo'naltirish
+    // Foydalanuvchi diplom raqamini kiritib, to'liq ma'lumotlarni ko'radi
+    const url = 'https://pharmacademyuz.vercel.app/view';
 
-    const lines = [];
-    lines.push("https://pharmacademyuz.vercel.app/view?data=")
-    if (formData.fullName) lines.push(`1. F.I.SH: ${formData.fullName.toUpperCase()}`);
-    if (formData.certNumber) lines.push(`2. SERTIFIKAT RAQAMI: ${formData.certNumber}`);
-    if (formData.qaydNumber) lines.push(`3. QAYD RAQAMI: ${formData.qaydNumber}`);
-    if (formData.diplomNumber) lines.push(`4. DIPLOM RAQAMI: ${formData.diplomNumber}`);
-    if (formData.courseTitle) lines.push(`5. YO'NALISH NOMI: ${formData.courseTitle}`);
-    if (formData.startDate && formData.endDate) {
-      lines.push(`6. MUDDATI: ${formData.startDate} - ${formData.endDate}`);
-    }
-    // Phone number is intentionally omitted from QR code text
-    return lines.join('\n');
+    console.log('QR Code URL:', url);
+    console.log('URL length:', url.length);
+    return url;
   };
 
   const downloadAsPNG = async () => {
@@ -439,6 +432,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
               justifyContent: 'center',
               background: '#fff',
               border: '2px solid #000',
+              padding: '15px'
             }}>
               {formData.qrImageUrl ? (
                 <img
@@ -454,12 +448,11 @@ export default function ViewCertificate({ data = {}, onClose }) {
               ) : (
                 <QRCodeCanvas
                   value={formatQRText()}
-                  size={300}
-                  bgColor="#fff"
-                  fgColor="#000"
-                  level="H"
+                  size={270}
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                  level="L"
                   style={{ width: '100%', height: '100%' }}
-                  onRendered={() => setQrReady(true)}
                 />
               )}
             </div>
