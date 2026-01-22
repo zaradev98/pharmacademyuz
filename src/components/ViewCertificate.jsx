@@ -458,7 +458,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
                 />
               ) : (
                 <QRCodeSVG
-                  value={formatQRText()}
+                  value='https://pharmacademyuz.vercel.app/view'
                   size={300}
                   bgColor="#ffffff"
                   fgColor="#000000"
