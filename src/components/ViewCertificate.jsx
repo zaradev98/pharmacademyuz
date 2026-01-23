@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -44,25 +44,23 @@ export default function ViewCertificate({ data = {}, onClose }) {
   };
   
   const formatQRText = () => {
-    // Test uchun turli xil URL formatlarini sinab ko'rish mumkin:
+    // Diplom raqamini encode qilib, qisqa URL yasaymiz
+    if (formData.diplomNumber) {
+      // Diplom raqamini URL encode qilamiz
+      const encodedDiplom = encodeURIComponent(formData.diplomNumber);
+      const url = `https://v1qr.vercel.app/?d=${encodedDiplom}`;
 
-    // Variant 1: To'liq URL (https bilan)
-    const url = 'https://pharmacademyuz.vercel.app/view';
+      console.log('Diplom Number:', formData.diplomNumber);
+      console.log('Encoded Diplom:', encodedDiplom);
+      console.log('QR Code URL:', url);
+      console.log('URL length:', url.length, 'chars');
 
-    // Variant 2: HTTP (ba'zan qisqaroq bo'ladi, lekin xavfsizroq emas)
-    // const url = 'http://pharmacademyuz.vercel.app/view';
+      return url;
+    }
 
-    // Variant 3: Protokolsiz (eng qisqa, lekin ishlamasligi mumkin)
-    // const url = 'pharmacademyuz.vercel.app/view';
-
-    console.log('QR Code URL:', url);
-    console.log('URL length:', url.length);
-    console.log('URL characters:', url.length, 'chars');
-
-    // iOS uchun maxsus test
-    console.log('Testing iOS QR scan - URL should be:', url);
-
-    return url;
+    // Agar diplom raqami bo'lmasa, fallback URL
+    console.warn('No diploma number found, using fallback URL');
+    return 'https://pharmacademyuz.vercel.app/view';
   };
 
   const downloadAsPNG = async () => {
@@ -458,7 +456,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
                 />
               ) : (
                 <QRCodeCanvas
-                  value='https://pharmacademyuz.vercel.app/view'
+                  value={formatQRText()}
                   size={300}
                   bgColor="#ffffff"
                   fgColor="#000000"
