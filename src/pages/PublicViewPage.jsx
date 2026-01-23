@@ -9,7 +9,6 @@ export default function PublicViewPage() {
   const [certificateData, setCertificateData] = useState(null);
 
   useEffect(() => {
-    console.log('PublicViewPage loaded!');
     document.title = "Sertifikat Ma'lumotlari";
 
     // URL parametrlarini tekshirish

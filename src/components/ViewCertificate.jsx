@@ -46,20 +46,11 @@ export default function ViewCertificate({ data = {}, onClose }) {
   const formatQRText = () => {
     // Diplom raqamini encode qilib, qisqa URL yasaymiz
     if (formData.diplomNumber) {
-      // Diplom raqamini URL encode qilamiz
       const encodedDiplom = encodeURIComponent(formData.diplomNumber);
-      const url = `https://v1qr.vercel.app/?d=${encodedDiplom}`;
-
-      console.log('Diplom Number:', formData.diplomNumber);
-      console.log('Encoded Diplom:', encodedDiplom);
-      console.log('QR Code URL:', url);
-      console.log('URL length:', url.length, 'chars');
-
-      return url;
+      return `https://v1qr.vercel.app/?d=${encodedDiplom}`;
     }
 
     // Agar diplom raqami bo'lmasa, fallback URL
-    console.warn('No diploma number found, using fallback URL');
     return 'https://pharmacademyuz.vercel.app/view';
   };
 
@@ -444,7 +435,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
               border: '2px solid #000',
               padding: '20px'
             }}>
-              {formData.qrImageUrl ? (
+              {formData.qrImageUrl && formData.qrImageUrl !== 'local' && formData.qrImageUrl.startsWith('http') ? (
                 <img
                   src={formData.qrImageUrl}
                   alt="QR Code"
@@ -459,7 +450,6 @@ export default function ViewCertificate({ data = {}, onClose }) {
                   value={formatQRText()}
                   size={300}
                   bgColor="#ffffff"
-                  fgColor="#000000"
                   level="L"
                   marginSize={4}
                   style={{ width: '100%', height: '100%' }}

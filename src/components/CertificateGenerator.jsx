@@ -46,8 +46,6 @@ export default function CertificateGenerator() {
     setLoading(true);
     setMessage('');
     try {
-      // Debug: log formData and processInsert
-      console.log('DEBUG: formData', formData);
       const processInsert = {
         user_id: user.id,
         title: formData.fullName || 'Sertifikat',
@@ -57,7 +55,6 @@ export default function CertificateGenerator() {
         qr_image_url: 'local',
         file_path:'local' // Keyinroq yangilanadi
       };
-      console.log('DEBUG: processInsert', processInsert);
       const { error: processError } = await supabase
         .from('process')
         .insert([processInsert])
