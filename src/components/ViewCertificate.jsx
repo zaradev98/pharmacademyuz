@@ -441,6 +441,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
               alignItems: 'center',
               justifyContent: 'center',
               background: '#fff',
+              border: '2px solid #000',
               padding: '20px'
             }}>
               {formData.qrImageUrl ? (
@@ -452,7 +453,6 @@ export default function ViewCertificate({ data = {}, onClose }) {
                     height: '100%',
                     objectFit: 'contain'
                   }}
-                  onLoad={() => setQrReady(true)}
                 />
               ) : (
                 <QRCodeCanvas
