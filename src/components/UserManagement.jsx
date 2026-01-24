@@ -34,7 +34,7 @@ export default function UserManagement() {
         setNewUser(prev => ({ ...prev, role_id: data[0].id }))
       }
     } catch (error) {
-      console.error('Rollarni yuklashda xatolik:', error)
+      alert('Rollarni yuklashda xatolik:')
     }
   }
 
@@ -52,7 +52,7 @@ export default function UserManagement() {
       if (error) throw error
       setUsers(data || [])
     } catch (error) {
-      console.error('Foydalanuvchilarni yuklashda xatolik:', error)
+      console.error('Foydalanuvchilarni yuklashda xatolik:')
       setMessage('Xatolik yuz berdi')
     } finally {
       setLoading(false)
@@ -72,7 +72,7 @@ export default function UserManagement() {
       loadUsers()
       setTimeout(() => setMessage(''), 3000)
     } catch (error) {
-      console.error('Xatolik:', error)
+      console.error('Xatolik:')
       setMessage('Status o\'zgartirishda xatolik')
     }
   }
@@ -121,7 +121,7 @@ export default function UserManagement() {
       loadUsers()
       setTimeout(() => setMessage(''), 3000)
     } catch (error) {
-      console.error('Xatolik:', error)
+      console.error('Xatolik:')
       setMessage('Foydalanuvchi qo\'shishda xatolik: ' + error.message)
     } finally {
       setLoading(false)

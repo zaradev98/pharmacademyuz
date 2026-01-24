@@ -30,13 +30,8 @@ export default function Login() {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#006670" strokeWidth="2">
-            <rect x="3" y="3" width="7" height="7"/>
-            <rect x="14" y="3" width="7" height="7"/>
-            <rect x="3" y="14" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/>
-          </svg>
-          <h1>QR Generator</h1>
+
+          <h1>PharmAcademyUZ</h1>
         </div>
 
         <form onSubmit={handleSubmit}>

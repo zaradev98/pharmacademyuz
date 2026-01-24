@@ -69,7 +69,6 @@ export default function CertificateGenerator() {
       window.location.href = '/dashboard';
     } catch (error) {
       setMessage('Saqlashda xatolik: ' + error.message);
-      console.error('DEBUG: Supabase insert error', error);
     } finally {
       setLoading(false);
     }

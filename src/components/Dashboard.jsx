@@ -36,7 +36,6 @@ export default function Dashboard() {
   const [currentQrDataURL, setCurrentQrDataURL] = useState('')
 
   useEffect(() => {
-    console.log(localStorage.getItem('certificateData'))
     loadHistory()
   }, [])
 
@@ -170,7 +169,6 @@ export default function Dashboard() {
       setTimeout(() => setMessage(''), 3000)
 
     } catch (error) {
-      console.error('Xatolik:', error)
       setMessage('QR kod yaratishda xatolik: ' + error.message)
     } finally {
       setLoading(false)
@@ -189,7 +187,6 @@ export default function Dashboard() {
       if (error) throw error
       setQrHistory(data || [])
     } catch (error) {
-      console.error('Tarixni yuklashda xatolik:', error)
     }
   }
 
@@ -316,7 +313,7 @@ export default function Dashboard() {
         .from('qrcodes')
         .remove([item.file_path])
 
-      if (storageError) console.error('Storage xatosi:', storageError)
+      
 
       const { error: dbError } = await supabase
         .from('process')
@@ -329,7 +326,6 @@ export default function Dashboard() {
       setTimeout(() => setMessage(''), 3000)
       loadHistory()
     } catch (error) {
-      console.error('O\'chirishda xatolik:', error)
       setMessage('O\'chirishda xatolik yuz berdi')
     }
   }
