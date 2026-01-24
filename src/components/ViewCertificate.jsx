@@ -47,11 +47,11 @@ export default function ViewCertificate({ data = {}, onClose }) {
     // Diplom raqamini encode qilib, qisqa URL yasaymiz
     if (formData.diplomNumber) {
       const encodedDiplom = encodeURIComponent(formData.diplomNumber);
-      return `https://v1qr.vercel.app/?d=${encodedDiplom}`;
+      return `https://saaff.uz/?d=${encodedDiplom}`;
     }
 
     // Agar diplom raqami bo'lmasa, fallback URL
-    return 'https://pharmacademyuz.vercel.app/view';
+    return 'https://imhone.uz/view';
   };
 
   const downloadAsPNG = async () => {

@@ -344,7 +344,7 @@ export default function Dashboard() {
             <rect x="3" y="14" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/>
           </svg>
-          <span>QR Generator</span>
+          <span>Pharmacademy UZ</span>
         </div>
         <div className="nav-right">
           {canManageUsers && canManageUsers(user?.role) && (
@@ -387,7 +387,7 @@ export default function Dashboard() {
 
         <div className="qr-history-card-full">
           <div className="history-header">
-            <h2>QR Kodlar Tarixi ({qrHistory.length})</h2>
+            <h2>Tarix ({qrHistory.length})</h2>
             <div className="history-actions">
               <input
                 type="text"
@@ -423,10 +423,10 @@ export default function Dashboard() {
                           <div className="info-name">{item.title}</div>
                           <div className="info-certificate">{item.description.replace('Sertifikat: ', '')}</div>
                           <div className="info-date">
-                            {new Date(item.created_at).toLocaleDateString('uz-UZ', {
+                            {new Date(item.created_at).toLocaleDateString('ru-RU', {
                               year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit',
                               hour: '2-digit',
                               minute: '2-digit'
                             })}

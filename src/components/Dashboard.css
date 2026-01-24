@@ -1,15 +1,20 @@
 .dashboard {
   min-height: 100vh;
-  background: #E4E4E4;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .navbar {
-  background: white;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
   padding: 20px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .navbar-logo {
@@ -19,9 +24,12 @@
 }
 
 .navbar-logo span {
-  color: #006670;
-  font-size: 20px;
-  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .nav-right {
@@ -31,36 +39,42 @@
 }
 
 .btn-icon-nav {
-  background: none;
-  border: none;
-  color: #006670;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid transparent;
+  color: #667eea;
   cursor: pointer;
-  padding: 8px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
-  transition: background 0.3s;
+  border-radius: 12px;
+  transition: all 0.3s ease;
   text-decoration: none;
 }
 
 .btn-icon-nav:hover {
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 .btn-secondary {
-  padding: 8px 16px;
-  background: #6c757d;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.3s;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-secondary:hover {
-  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
 }
 
 .dashboard-content {
@@ -188,32 +202,55 @@
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: #006670;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 102, 112, 0.4);
-  transition: all 0.3s;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+  transition: all 0.3s ease;
   z-index: 999;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.7);
+  }
 }
 
 .fab:hover {
-  background: #005560;
-  box-shadow: 0 6px 16px rgba(0, 102, 112, 0.5);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.6);
+  transform: translateY(-4px) scale(1.05);
 }
 
 .qr-history-card-full {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .history-header {
@@ -227,6 +264,12 @@
 
 .history-header h2 {
   margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .history-actions {
@@ -239,16 +282,24 @@
 
 .search-input {
   flex: 1;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 12px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
   font-size: 14px;
   min-width: 200px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: white;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #006670;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.search-input:hover {
+  border-color: #667eea;
 }
 
 .table-wrapper {
@@ -263,17 +314,18 @@
 }
 
 .history-table thead {
-  background: #f9f9f9;
-  border-bottom: 2px solid #006670;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-bottom: 3px solid #667eea;
 }
 
 .history-table th {
-  padding: 15px;
+  padding: 18px 15px;
   text-align: left;
-  font-weight: 600;
-  color: #333;
-  font-size: 14px;
+  font-weight: 700;
+  color: #667eea;
+  font-size: 13px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .history-table td {
@@ -283,12 +335,14 @@
 }
 
 .history-table tbody tr {
-  transition: background 0.2s;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .history-table tbody tr:hover {
-  background: #f9f9f9;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
 }
 
 .text-center {
@@ -342,49 +396,53 @@
 }
 
 .btn-certificate-icon {
-  color: #28a745;
+  color: #10b981;
 }
 
 .btn-certificate-icon:hover {
-  background: #e8f5ea;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .btn-download-icon {
-  color: #006670;
+  color: #667eea;
 }
 
 .btn-download-icon:hover {
-  background: #e8f4f5;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-delete-icon {
-  color: #dc3545;
+  color: #ef4444;
 }
 
 .btn-delete-icon:hover {
-  background: #ffe5e8;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .action-modal-content {
   background: white;
-  border-radius: 12px;
+  border-radius: 24px;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  animation: modalSlideUp 0.3s ease-out;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideUp 0.4s ease-out;
+  overflow: hidden;
 }
 
 @keyframes modalSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(40px) scale(0.9);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -392,15 +450,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-bottom: 2px solid #bae6fd;
 }
 
 .action-modal-header h3 {
   margin: 0;
-  color: #333;
-  font-size: 18px;
-  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
 }
 
 .action-modal-body {
@@ -414,68 +476,97 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 14px 20px;
+  gap: 12px;
+  padding: 16px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   width: 100%;
+  letter-spacing: 0.3px;
 }
 
 .action-modal-btn-certificate {
-  background: #28a745;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
 }
 
 .action-modal-btn-certificate:hover {
-  background: #218838;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
 .action-modal-btn-download {
-  background: #006670;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
 .action-modal-btn-download:hover {
-  background: #005560;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 102, 112, 0.3);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
 .action-modal-btn-delete {
-  background: #dc3545;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
 }
 
 .action-modal-btn-delete:hover {
-  background: #c82333;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
 }
 
 .alert-message {
-  padding: 12px 20px;
-  margin: 10px 40px;
-  border-radius: 5px;
+  padding: 16px 24px;
+  margin: 15px 40px;
+  border-radius: 16px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: slideDown 0.4s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .alert-success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border: 2px solid #6ee7b7;
+}
+
+.alert-success::before {
+  content: "✅";
+  font-size: 20px;
 }
 
 .alert-error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 2px solid #fca5a5;
+}
+
+.alert-error::before {
+  content: "⚠️";
+  font-size: 20px;
 }
 
 .empty-message {
