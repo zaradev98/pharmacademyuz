@@ -25,7 +25,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
   const source = Object.keys(data).length > 0 ? data : localData;
 
 
-  const directorName = source.directorName || "I.M. FAYZULLO O'G'LI";
+  const directorName ="M.Z.NURULLAYEVA";
   const formData = {
     fullName: source.fullName || '',
     certNumber: source.certificateNumber || '',
@@ -141,13 +141,14 @@ export default function ViewCertificate({ data = {}, onClose }) {
               position: 'relative',
               transformOrigin: 'top left',
               transform: 'scale(0.38)',
-              fontFamily: "'Times New Roman', serif"
+              fontFamily: "'Times New Roman', serif",
+              fontWeight: '800'
             }}
           >
             {/* Logo/Emblem */}
             <div style={{
               position: 'absolute',
-              top: '42%',
+              top: '40%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: '3000px',
@@ -173,34 +174,34 @@ export default function ViewCertificate({ data = {}, onClose }) {
             <div style={{
               position: 'absolute',
               top: '300px',
-              left: '300px',
+              left: '400px',
               width: '1000px',
               textAlign: 'center',
               textTransform: 'uppercase',
               lineHeight: '1.4'
             }}>
               <div style={{
-                fontSize: '52px',
-                fontWeight: '700',
+                fontSize: '62px',
+                fontWeight: '900',
                 color: '#000',
-                marginBottom: '12px',
-                letterSpacing: '2px'
+                marginBottom: '8px',
+                letterSpacing: '0px'
               }}>
                 O'ZBEKISTON RESPUBLIKASI
               </div>
               <div style={{
-                fontSize: '48px',
-                fontWeight: '600',
+                fontSize: '56px',
+                fontWeight: '800',
                 color: '#000',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 OLIY TA'LIM FAN VA
               </div>
               <div style={{
-                fontSize: '48px',
-                fontWeight: '600',
+                fontSize: '56px',
+                fontWeight: '800',
                 color: '#000',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 INNOVATSIYA VAZIRLIGI
               </div>
@@ -210,33 +211,33 @@ export default function ViewCertificate({ data = {}, onClose }) {
             <div style={{
               position: 'absolute',
               top: '300px',
-              right: '300px',
+              right: '400px',
               width: '1200px',
               textAlign: 'center',
               textTransform: 'uppercase',
               lineHeight: '1.4'
             }}>
               <div style={{
-                fontSize: '48px',
-                fontWeight: '600',
+                fontSize: '56px',
+                fontWeight: '800',
                 color: '#000',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 MINISTRY OF HIGHER EDUCATION,
               </div>
               <div style={{
-                fontSize: '48px',
-                fontWeight: '600',
+                fontSize: '56px',
+                fontWeight: '800',
                 color: '#000',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 SCIENCE AND INNOVATION OF THE
               </div>
               <div style={{
-                fontSize: '48px',
-                fontWeight: '600',
+                fontSize: '56px',
+                fontWeight: '800',
                 color: '#000',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 REPUBLIC OF UZBEKISTAN
               </div>
@@ -245,17 +246,18 @@ export default function ViewCertificate({ data = {}, onClose }) {
             {/* Main Title - SERTIFIKAT */}
             <div style={{
               position: 'absolute',
-              top: '600px',
+              top: '650px',
               left: '500px',
               right: '500px',
               textAlign: 'center'
             }}>
               <h1 style={{
-                fontSize: '320px',
+                fontSize: '350px',
                 fontWeight: '900',
                 color: '#000',
                 textTransform: 'uppercase',
-                letterSpacing: '20px'
+                letterSpacing: '10px',
+                lineHeight: '1.0'
               }}>
                 SERTIFIKAT
               </h1>
@@ -264,23 +266,28 @@ export default function ViewCertificate({ data = {}, onClose }) {
             {/* Certificate Number and Diploma Number */}
             <div style={{
               position: 'absolute',
-              top: '900px',
+              lineHeight:'0.95',
+              top: '910px',
               left: '900px',
               right: '900px',
               textAlign: 'center'
             }}>
               <div style={{
-                fontSize: '72px',
-                fontWeight: '700',
+                marginTop: '50px',
+                fontSize: '82px',
+                fontWeight: '800',
                 color: '#000',
-                marginBottom: '18px',
+                marginBottom: '12px',
+                letterSpacing: '0px'
               }}>
                 {formData.certNumber.toUpperCase()}
               </div>
               <div style={{
-                fontSize: '50px',
-                fontWeight: '600',
+                fontSize: '58px',
+                fontWeight: '800',
+                marginBottom: '70px',
                 color: '#000',
+                letterSpacing: '0px'
               }}>
                 {formData.diplomNumber} - ushbu sertifikat egasining diplom raqami
               </div>
@@ -292,15 +299,16 @@ export default function ViewCertificate({ data = {}, onClose }) {
               top: '1150px',
               left: '700px',
               right: '700px',
-              textAlign: 'center'
+              textAlign: 'center',
+              borderBottom: '10px solid #000',
             }}>
               <h2 style={{
-                fontSize: '90px',
-                fontWeight: '800',
+                fontSize: '105px',
+                fontWeight: '900',
                 color: '#000',
                 textTransform: 'uppercase',
-                letterSpacing: '5px',
-                lineHeight: '1.3'
+                letterSpacing: '2px',
+                lineHeight: '1'
               }}>
                 {formData.fullName}
               </h2>
@@ -316,10 +324,10 @@ export default function ViewCertificate({ data = {}, onClose }) {
             }}>
               <p style={{
                 fontSize: '54px',
-                fontWeight: '500',
+                fontWeight: '800',
                 color: '#000',
-                lineHeight: '1.6',
-                letterSpacing: '1px'
+                lineHeight: '1',
+                letterSpacing: '0px'
               }}>
                 {formData.studyPeriod
                   ? `${formData.studyPeriod} oralig'ida`
@@ -327,7 +335,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
                     ? `${formData.startDate} dan ${formData.endDate} gacha`
                     : ''
                 } IMH-TRADE tomonidan<br/>
-                {formData.hours} soatga mo'ljallangan "<span style={{ fontWeight: '700', color: '#000' }}>{formData.courseTitle}</span>"<br/>
+                {formData.hours} soatga mo'ljallangan "<span style={{ fontWeight: '900', color: '#000' }}>{formData.courseTitle}</span>"<br/>
                 yo'nalishi farmatsevt mutaxassisligi bo'yicha uzluksiz<br/>
                 kasbiy ta'lim tizimida malaka oshirish vebinar-treningni muvaffaqiyatli tugatganligi haqida berilgan.
               </p>
@@ -342,12 +350,12 @@ export default function ViewCertificate({ data = {}, onClose }) {
             }}>
              
               <div style={{
-                fontSize: '46px',
-                fontWeight: '600',
+                fontSize: '60px',
+                fontWeight: '800',
                 color: '#000',
                 textAlign: 'center',
                 textTransform: 'uppercase',
-                letterSpacing: '2px'
+                letterSpacing: '0px'
               }}>
                 DIREKTOR
               </div>
@@ -367,11 +375,11 @@ export default function ViewCertificate({ data = {}, onClose }) {
               width: '950px'
             }}>
               <div style={{
-                fontSize: '46px',
-                fontWeight: '600',
+                fontSize: '60px',
+                fontWeight: '800',
                 color: '#000',
                 textAlign: 'center',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 {formData.directorName.toUpperCase()}
               </div>
@@ -389,10 +397,10 @@ export default function ViewCertificate({ data = {}, onClose }) {
               position: 'absolute',
               bottom: '330px',
               left: '330px',
-              fontSize: '48px',
-              fontWeight: '600',
+              fontSize: '56px',
+              fontWeight: '800',
               color: '#000',
-              letterSpacing: '1px'
+              letterSpacing: '0px'
             }}>
               Ro'yxatga olingan sana {formData.registerDate}
             </div>
@@ -405,19 +413,19 @@ export default function ViewCertificate({ data = {}, onClose }) {
               textAlign: 'right'
             }}>
               <div style={{
-                fontSize: '48px',
-                fontWeight: '600',
+                fontSize: '56px',
+                fontWeight: '800',
                 color: '#000',
                 marginBottom: '12px',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 Qayd raqami: {formData.qaydNumber}
               </div>
               <div style={{
-                fontSize: '46px',
-                fontWeight: '500',
+                fontSize: '54px',
+                fontWeight: '800',
                 color: '#000',
-                letterSpacing: '1px'
+                letterSpacing: '0px'
               }}>
                 Sertifikat amal qilish muddati {formData.durationYears || ''} yil
               </div>
@@ -434,7 +442,6 @@ export default function ViewCertificate({ data = {}, onClose }) {
               alignItems: 'center',
               justifyContent: 'center',
               background: '#fff',
-              border: '2px solid #000',
               padding: '20px'
             }}>
               {formData.qrImageUrl && formData.qrImageUrl !== 'local' && formData.qrImageUrl.startsWith('http') ? (
@@ -453,7 +460,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
                   size={300}
                   bgColor="#ffffff"
                   level="L"
-                  marginSize={4}
+                  marginSize={2}
                   style={{ width: '100%', height: '100%' }}
                 />
               )}
@@ -474,7 +481,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
               style={{
                 padding: '15px 35px',
                 fontSize: '16px',
-                fontWeight: '600',
+                fontWeight: '700',
                 color: '#666',
                 background: '#fff',
                 border: '2px solid #ddd',
