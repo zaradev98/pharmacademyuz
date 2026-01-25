@@ -176,26 +176,84 @@
 }
 
 .btn-primary {
-  width: 100%;
-  padding: 12px;
-  background: #006670;
+  width: auto;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: 500;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 10px;
+  transition: all 0.3s ease;
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-primary:hover {
-  background: #005560;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
 }
 
 .btn-primary:disabled {
   background: #ccc;
   cursor: not-allowed;
+}
+
+.btn-qr-create {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-qr-create::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+.btn-qr-create:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-qr-create:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 28px rgba(102, 126, 234, 0.5);
+}
+
+.btn-qr-create:active {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-qr-create svg {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .fab {
@@ -304,7 +362,9 @@
 
 .table-wrapper {
   overflow-x: auto;
+  overflow-y: auto;
   margin-top: 20px;
+  max-height: calc(100vh - 350px);
 }
 
 .history-table {
@@ -316,6 +376,9 @@
 .history-table thead {
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border-bottom: 3px solid #667eea;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .history-table th {

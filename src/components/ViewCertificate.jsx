@@ -25,7 +25,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
   const source = Object.keys(data).length > 0 ? data : localData;
 
 
-  const directorName = source.directorName || "I.M. Fayzullo o'g'li";
+  const directorName = source.directorName || "I.M. FAYZULLO O'G'LI";
   const formData = {
     fullName: source.fullName || '',
     certNumber: source.certificateNumber || '',
@@ -336,41 +336,36 @@ export default function ViewCertificate({ data = {}, onClose }) {
             {/* Director Signature Line - Left */}
             <div style={{
               position: 'absolute',
-              top: '1850px',
+              top: '1780px',
               left: '700px',
               width: '750px'
             }}>
-              <div style={{
-                width: '100%',
-                height: '5px',
-                background: '#000',
-                marginBottom: '18px'
-              }} />
+             
               <div style={{
                 fontSize: '46px',
                 fontWeight: '600',
                 color: '#000',
                 textAlign: 'center',
-                textTransform: 'lowercase',
+                textTransform: 'uppercase',
                 letterSpacing: '2px'
               }}>
-                direktor
+                DIREKTOR
               </div>
-            </div>
-
-            {/* Director Name - Right */}
-            <div style={{
-              position: 'absolute',
-              top: '1850px',
-              left: '2050px',
-              width: '950px'
-            }}>
-              <div style={{
+               <div style={{
                 width: '100%',
                 height: '5px',
                 background: '#000',
                 marginBottom: '18px'
               }} />
+            </div>
+
+            {/* Director Name - Right */}
+            <div style={{
+              position: 'absolute',
+              top: '1780px',
+              left: '2050px',
+              width: '950px'
+            }}>
               <div style={{
                 fontSize: '46px',
                 fontWeight: '600',
@@ -378,8 +373,15 @@ export default function ViewCertificate({ data = {}, onClose }) {
                 textAlign: 'center',
                 letterSpacing: '1px'
               }}>
-                {formData.directorName}
+                {formData.directorName.toUpperCase()}
               </div>
+
+              <div style={{
+                width: '100%',
+                height: '5px',
+                background: '#000',
+                marginBottom: '18px'
+              }} />
             </div>
 
             {/* Registration Date - Bottom Left */}

@@ -31,8 +31,6 @@ export default function Dashboard() {
   const [qrHistory, setQrHistory] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [showModal, setShowModal] = useState(false)
-  const [showActionModal, setShowActionModal] = useState(false)
-  const [selectedItem, setSelectedItem] = useState(null)
   const [currentQrDataURL, setCurrentQrDataURL] = useState('')
 
   useEffect(() => {
@@ -190,64 +188,6 @@ export default function Dashboard() {
     }
   }
 
-  const handleRowClick = (item, e) => {
-    e.preventDefault()
-    setSelectedItem(item)
-    setShowActionModal(true)
-  }
-
-  const closeActionModal = () => {
-    setShowActionModal(false)
-    setSelectedItem(null)
-  }
-
-
-  const handleDownloadClick = () => {
-    if (selectedItem) {
-      // Instead of downloading, navigate to /view-certificate with data
-      navigate('/view-certificate', { state: { data: selectedItem } })
-      closeActionModal()
-    }
-  }
-
-  const handleDeleteClick = () => {
-    if (selectedItem) {
-      handleDelete(selectedItem)
-      closeActionModal()
-    }
-  }
-
-  const handleShowCertificate = () => {
-    if (selectedItem) {
-      openCertificateHTML(selectedItem)
-    }
-  }
-
-  const openCertificateHTML = (item) => {
-    const lines = item.qr_text.split('\n')
-    let fullName = '', certificateNumber = '', registrationNumber = ''
-    let diplomaNumber = '', organizationName = '', validFrom = '', validTo = ''
-
-    lines.forEach(line => {
-      if (line.includes('F.I.SH:')) fullName = line.split('F.I.SH:')[1].trim()
-      else if (line.includes('SERTIFIKAT RAQAMI:')) certificateNumber = line.split('SERTIFIKAT RAQAMI:')[1].trim()
-      else if (line.includes('QAYD RAQAMI:')) registrationNumber = line.split('QAYD RAQAMI:')[1].trim()
-      else if (line.includes('DIPLOM RAQAMI:')) diplomaNumber = line.split('DIPLOM RAQAMI:')[1].trim()
-      else if (line.includes('YO\'NALISH NOMI:')) organizationName = line.split('YO\'NALISH NOMI:')[1].trim()
-      else if (line.includes('MUDDATI:')) {
-        const dates = line.split('MUDDATI:')[1].trim().split('-')
-        if (dates.length === 2) {
-          validFrom = dates[0].trim()
-          validTo = dates[1].trim()
-        }
-      }
-    })
-
-    const years = validFrom && validTo ?
-      new Date(validTo.split('.').reverse().join('-')).getFullYear() -
-      new Date(validFrom.split('.').reverse().join('-')).getFullYear() : '5'
-
-  }
 
   // handleDownload now opens /view-certificate in a new tab and passes data via sessionStorage
   const handleDownload = (qrImageUrl, title, item) => {
@@ -370,21 +310,24 @@ export default function Dashboard() {
       )}
 
       <div className="dashboard-content">
-        {/* QR kod yaratish endi CertificateGenerator.jsx orqali bo'ladi */}
-
-        <button onClick={() => navigate('/certificate-generator')} className="fab" title="Yangi QR kod yaratish">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="3" width="7" height="7"/>
-            <rect x="14" y="3" width="7" height="7"/>
-            <rect x="3" y="14" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/>
-          </svg>
-        </button>
-
         <div className="qr-history-card-full">
           <div className="history-header">
-            <h2>Tarix ({qrHistory.length})</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <h2>Tarix ({qrHistory.length})</h2>
+            </div>
             <div className="history-actions">
+              <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create" title="Yangi sertifikat yaratish">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <rect x="14" y="14" width="7" height="7" rx="1"/>
+                  <circle cx="6.5" cy="6.5" r="1" fill="currentColor"/>
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+                  <circle cx="6.5" cy="17.5" r="1" fill="currentColor"/>
+                  <circle cx="17.5" cy="17.5" r="1" fill="currentColor"/>
+                </svg>
+              </button>
               <input
                 type="text"
                 className="search-input"
@@ -412,7 +355,7 @@ export default function Dashboard() {
                 </thead>
                 <tbody>
                   {filteredHistory.map((item, index) => (
-                    <tr key={item.id} onClick={(e) => handleRowClick(item, e)} onContextMenu={(e) => e.preventDefault()}>
+                    <tr key={item.id}>
                       <td className="text-center">{index + 1}</td>
                       <td>
                         <div className="table-info-stack">
@@ -441,15 +384,17 @@ export default function Dashboard() {
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
                             </svg>
                           </button>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
-                            className="btn-icon btn-delete-icon"
-                            title="O'chirish"
-                          >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>
-                            </svg>
-                          </button>
+                          {user?.role === 'superadmin' && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
+                              className="btn-icon btn-delete-icon"
+                              title="O'chirish"
+                            >
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>
+                              </svg>
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -460,42 +405,6 @@ export default function Dashboard() {
           )}
         </div>
 
-        {showActionModal && selectedItem && (
-          <div className="modal-overlay" onClick={closeActionModal}>
-            <div className="action-modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="action-modal-header">
-                <h3>{selectedItem.title}</h3>
-                <button onClick={closeActionModal} className="btn-close">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="action-modal-body">
-                <button onClick={handleDownloadClick} className="action-modal-btn action-modal-btn-download">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                  </svg>
-                  Yuklab olish
-                </button>
-                <button onClick={handleShowCertificate} className="action-modal-btn action-modal-btn-certificate">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <path d="M8 6h8M8 10h8M8 14h6"/>
-                  </svg>
-                  Sertifikatni ko'rish
-                </button>
-                <button onClick={handleDeleteClick} className="action-modal-btn action-modal-btn-delete">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>
-                  </svg>
-                  O'chirish
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
