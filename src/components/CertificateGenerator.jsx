@@ -316,7 +316,7 @@ export default function CertificateGenerator() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>Dars soati</label>
+                <label style={labelStyle}>Malaka oshirish soati</label>
                 <input
                   type="number"
                   value={formData.hours}
