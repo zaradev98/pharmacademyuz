@@ -273,11 +273,11 @@ export default function ViewCertificate({ data = {}, onClose }) {
               textAlign: 'center'
             }}>
               <div style={{
-                marginTop: '50px',
+                marginTop: '90px',
                 fontSize: '82px',
                 fontWeight: '800',
                 color: '#000',
-                marginBottom: '12px',
+                marginBottom: '24px',
                 letterSpacing: '0px'
               }}>
                 {formData.certNumber.toUpperCase()}
@@ -285,7 +285,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
               <div style={{
                 fontSize: '58px',
                 fontWeight: '800',
-                marginBottom: '70px',
+                marginBottom: '100px',
                 color: '#000',
                 letterSpacing: '0px'
               }}>
@@ -296,7 +296,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
             {/* Full Name */}
             <div style={{
               position: 'absolute',
-              top: '1150px',
+              top: '1200px',
               left: '700px',
               right: '700px',
               textAlign: 'center',
@@ -317,7 +317,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
             {/* Main Description Text */}
             <div style={{
               position: 'absolute',
-              top: '1330px',
+              top: '1350px',
               left: '650px',
               right: '650px',
               textAlign: 'center'
@@ -326,7 +326,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
                 fontSize: '54px',
                 fontWeight: '800',
                 color: '#000',
-                lineHeight: '1',
+                lineHeight: '1.1',
                 letterSpacing: '0px'
               }}>
                 {formData.studyPeriod
@@ -409,13 +409,14 @@ export default function ViewCertificate({ data = {}, onClose }) {
             <div style={{
               position: 'absolute',
               bottom: '340px',
-              right: '340px',
+              right: '350px',
               textAlign: 'right'
             }}>
               <div style={{
                 fontSize: '56px',
                 fontWeight: '800',
                 color: '#000',
+                textAlign:'center',
                 marginBottom: '12px',
                 letterSpacing: '0px'
               }}>
