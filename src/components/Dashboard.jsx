@@ -197,7 +197,7 @@ export default function Dashboard() {
       certData = JSON.parse(item.qr_text);
       // Add extra fields from item if not present in qr_text
       certData.qrImageUrl = item.qr_image_url || '';
-      certData.directorName = certData.directorName || "I.M. Fayzullo o'g'li";
+      certData.directorName = certData.directorName || "M.Z.NURULLAYEVA";
       certData.certificateNumber = certData.certificateNumber || (item.description ? item.description.replace('Sertifikat: ', '') : '');
     } catch (e) {
       // Fallback: old text format
@@ -316,17 +316,8 @@ export default function Dashboard() {
               <h2>Tarix ({qrHistory.length})</h2>
             </div>
             <div className="history-actions">
-              <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create" title="Yangi sertifikat yaratish">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <rect x="3" y="3" width="7" height="7" rx="1"/>
-                  <rect x="14" y="3" width="7" height="7" rx="1"/>
-                  <rect x="3" y="14" width="7" height="7" rx="1"/>
-                  <rect x="14" y="14" width="7" height="7" rx="1"/>
-                  <circle cx="6.5" cy="6.5" r="1" fill="currentColor"/>
-                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
-                  <circle cx="6.5" cy="17.5" r="1" fill="currentColor"/>
-                  <circle cx="17.5" cy="17.5" r="1" fill="currentColor"/>
-                </svg>
+              <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create" title="+YANGI SERTIFIKAT">
+               +YANGI SERTIFIKAT
               </button>
               <input
                 type="text"

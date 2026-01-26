@@ -110,6 +110,67 @@ export default function ViewCertificate({ data = {}, onClose }) {
 
 
   return (
+    <div>
+      {/* Download Buttons */}
+        <div style={{
+          marginTop: '5px',
+          marginBottom: '-15px',
+          display: 'flex',
+          gap: '15px',
+          justifyContent: 'center',
+          flexWrap: 'wrap'
+        }}>
+          {onClose && (
+            <button
+              onClick={onClose}
+              style={{
+                padding: '5px 15px',
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#666',
+                background: '#fff',
+                border: '2px solid #ddd',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              Yopish
+            </button>
+          )}
+          <button
+            onClick={downloadAsPNG}
+            style={{
+              padding: '5px 15px',
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#fff',
+              background: 'linear-gradient(135deg, #006670 0%, #004d54 100%)',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            PNG yuklab olish
+          </button>
+          <button
+            onClick={downloadAsPDF}
+            style={{
+              padding: '5px 15px',
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#fff',
+              background: 'linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%)',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            PDF yuklab olish
+          </button>
+        </div>
     <div style={{
       minHeight: '100vh',
       padding: '30px',
@@ -117,6 +178,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
       justifyContent: 'center',
       alignItems: 'center'
     }}>
+
       <div style={{
         width: '100%',
       }}>
@@ -469,65 +531,9 @@ export default function ViewCertificate({ data = {}, onClose }) {
           </div>
         </div>
 
-        {/* Download Buttons */}
-        <div style={{
-          display: 'flex',
-          gap: '15px',
-          justifyContent: 'center',
-          flexWrap: 'wrap'
-        }}>
-          {onClose && (
-            <button
-              onClick={onClose}
-              style={{
-                padding: '15px 35px',
-                fontSize: '16px',
-                fontWeight: '700',
-                color: '#666',
-                background: '#fff',
-                border: '2px solid #ddd',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              Yopish
-            </button>
-          )}
-          <button
-            onClick={downloadAsPNG}
-            style={{
-              padding: '15px 35px',
-              fontSize: '16px',
-              fontWeight: '600',
-              color: '#fff',
-              background: 'linear-gradient(135deg, #006670 0%, #004d54 100%)',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            PNG yuklab olish
-          </button>
-          <button
-            onClick={downloadAsPDF}
-            style={{
-              padding: '15px 35px',
-              fontSize: '16px',
-              fontWeight: '600',
-              color: '#fff',
-              background: 'linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%)',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            PDF yuklab olish
-          </button>
-        </div>
+        
       </div>
+    </div>
     </div>
   );
 }
