@@ -32,12 +32,19 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [currentQrDataURL, setCurrentQrDataURL] = useState('')
+  const [showArchived, setShowArchived] = useState(false) // Arxivni ko'rsatish uchun
 
   useEffect(() => {
     loadHistory()
   }, [])
 
-  const filteredHistory = qrHistory.filter((item) => {
+  // Active va arxivlangan sertifikatlarni filterlash
+  const activeHistory = qrHistory.filter(item => item.is_active !== false)
+  const archivedHistory = qrHistory.filter(item => item.is_active === false)
+
+  const currentList = showArchived ? archivedHistory : activeHistory
+
+  const filteredHistory = currentList.filter((item) => {
     const query = searchQuery.toLowerCase()
     return (
       item.title.toLowerCase().includes(query) ||
@@ -135,7 +142,8 @@ export default function Dashboard() {
             certificate_image_url: certUrlData.publicUrl,
             title: formData.fullName || 'Sertifikat',
             description: `Sertifikat: ${formData.certificateNumber}`,
-            file_path: qrUploadData.path
+            file_path: qrUploadData.path,
+            is_active: true
           }])
           .select()
           .single()
@@ -249,24 +257,19 @@ export default function Dashboard() {
 
   const handleDelete = async (item) => {
     try {
-      const { error: storageError } = await supabase.storage
-        .from('qrcodes')
-        .remove([item.file_path])
-
-      
-
+      // Sertifikatni o'chirmasdan, faqat is_active ni false qilamiz
       const { error: dbError } = await supabase
         .from('process')
-        .delete()
+        .update({ is_active: false })
         .eq('id', item.id)
 
       if (dbError) throw dbError
 
-      setMessage('QR kod o\'chirildi!')
+      setMessage('Sertifikat arxivlandi!')
       setTimeout(() => setMessage(''), 3000)
       loadHistory()
     } catch (error) {
-      setMessage('O\'chirishda xatolik yuz berdi')
+      setMessage('Arxivlashda xatolik yuz berdi')
     }
   }
 
@@ -312,8 +315,72 @@ export default function Dashboard() {
       <div className="dashboard-content">
         <div className="qr-history-card-full">
           <div className="history-header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <h2>Tarix ({qrHistory.length})</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0px' }}>
+              <div
+                onClick={() => setShowArchived(false)}
+                style={{
+                  padding: '12px 24px',
+                  cursor: 'pointer',
+                  borderBottom: !showArchived ? '3px solid #006670' : '3px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontWeight: !showArchived ? '700' : '500',
+                  color: !showArchived ? '#006670' : '#666',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <span style={{ fontSize: '18px' }}>Sertifikatlar</span>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: !showArchived ? '#e8f5f6' : '#f5f5f5',
+                  padding: '4px 10px',
+                  borderRadius: '12px'
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#4caf50'
+                  }} />
+                  <span style={{ fontSize: '14px', fontWeight: '700' }}>{activeHistory.length}</span>
+                </div>
+              </div>
+
+              <div
+                onClick={() => setShowArchived(true)}
+                style={{
+                  padding: '12px 24px',
+                  cursor: 'pointer',
+                  borderBottom: showArchived ? '3px solid #006670' : '3px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontWeight: showArchived ? '700' : '500',
+                  color: showArchived ? '#006670' : '#666',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <span style={{ fontSize: '18px' }}>Arxiv</span>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: showArchived ? '#e8f5f6' : '#f5f5f5',
+                  padding: '4px 10px',
+                  borderRadius: '12px'
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#f44336'
+                  }} />
+                  <span style={{ fontSize: '14px', fontWeight: '700' }}>{archivedHistory.length}</span>
+                </div>
+              </div>
             </div>
             <div className="history-actions">
               <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create" >
@@ -330,8 +397,10 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {qrHistory.length === 0 ? (
-            <p className="empty-message">Hozircha QR kodlar yo'q</p>
+          {currentList.length === 0 ? (
+            <p className="empty-message">
+              {showArchived ? 'Arxivlangan sertifikatlar yo\'q' : 'Faol sertifikatlar yo\'q'}
+            </p>
           ) : filteredHistory.length === 0 ? (
             <p className="empty-message">Qidiruv bo'yicha natija topilmadi</p>
           ) : (
