@@ -16,7 +16,7 @@ jobs:
       - name: Ping Supabase Database
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY}}
           TABLE: ${{ secrets.TABLE_NAME }}
         run: |
           echo "🔄 Pinging Supabase..."
