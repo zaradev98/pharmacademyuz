@@ -47,7 +47,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
     // Diplom raqamini encode qilib, qisqa URL yasaymiz
     if (formData.diplomNumber) {
       const encodedDiplom = encodeURIComponent(formData.diplomNumber);
-      return `https://saaff.uz/?d=${encodedDiplom}`;
+      return `https://imh-trade.uz/?d=${encodedDiplom}`;
     }
 
     // Agar diplom raqami bo'lmasa, fallback URL

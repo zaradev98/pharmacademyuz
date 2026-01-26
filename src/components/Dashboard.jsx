@@ -316,7 +316,7 @@ export default function Dashboard() {
               <h2>Tarix ({qrHistory.length})</h2>
             </div>
             <div className="history-actions">
-              <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create" title="+YANGI SERTIFIKAT">
+              <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create" >
                +YANGI SERTIFIKAT
               </button>
               <input
