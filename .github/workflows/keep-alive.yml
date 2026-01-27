@@ -3,7 +3,7 @@ name: Keep Supabase Alive
 on:
   schedule:
     # Har kuni soat 03:00 UTC (8:00 Toshkent vaqti)
-    - cron: '0 14 * * *'
+    - cron: '0 5 * * *'
   
   # Manual test qilish uchun
   workflow_dispatch:
