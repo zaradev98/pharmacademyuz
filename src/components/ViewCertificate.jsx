@@ -397,9 +397,11 @@ export default function ViewCertificate({ data = {}, onClose }) {
                     ? `${formData.startDate} dan ${formData.endDate} gacha`
                     : ''
                 } IMH-TRADE tomonidan<br/>
+                 
+
                 {formData.hours} soatga mo'ljallangan "<span style={{ fontWeight: '900', color: '#000' }}>{formData.courseTitle}</span>"<br/>
-                yo'nalishi farmatsevt mutaxassisligi bo'yicha uzluksiz<br/>
-                kasbiy ta'lim tizimida malaka oshirish vebinar-treningni muvaffaqiyatli tugatganligi haqida berilgan.
+                milliy standarti asosida farmasevt mutaxassislar uchun tashkil etilgan<br/>
+                online-treningni muvaffaqiyatli tugatganligi haqida berilgan.
               </p>
             </div>
 
