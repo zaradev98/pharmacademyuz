@@ -400,7 +400,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
                  
 
                 {formData.hours} soatga mo'ljallangan "<span style={{ fontWeight: '900', color: '#000' }}>{formData.courseTitle}</span>"<br/>
-                milliy standarti asosida farmasevt mutaxassislar uchun tashkil etilgan<br/>
+                milliy standarti asosida farmatsevt mutaxassislar uchun tashkil etilgan<br/>
                 online-treningni muvaffaqiyatli tugatganligi haqida berilgan.
               </p>
             </div>
