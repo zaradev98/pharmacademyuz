@@ -31,7 +31,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
     certNumber: source.certificateNumber || '',
     diplomNumber: source.diplomaNumber || '',
     qaydNumber: source.registrationNumber || '',
-    courseTitle: source.organizationName+" (GPP) || '',
+    courseTitle: source.organizationName+"(GPP) || '',
     durationYears: source.durationYears || '',
     startDate: source.validFrom || '',
     endDate: source.validTo || '',
