@@ -23,7 +23,8 @@ export default function CertificateGenerator() {
     verificationPhone: '',
     durationYears: '', // Sertifikat amal qilish muddati (yil)
     hours: '',         // Soat
-    issueDate: ''      // Berilgan sana
+    issueDate: '',// Berilgan sana
+    director:''
   });
 
   const formatDate = (dateString) => {
