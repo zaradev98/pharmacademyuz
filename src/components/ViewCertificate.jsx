@@ -25,7 +25,7 @@ export default function ViewCertificate({ data = {}, onClose }) {
   const source = Object.keys(data).length > 0 ? data : localData;
 
 
-  const directorName ="M.Z.NURULLAYEVA";
+  const directorName = source.director || source.directorName || "M.Z.NURULLAYEVA";
   const formData = {
     fullName: source.fullName || '',
     certNumber: source.certificateNumber || '',

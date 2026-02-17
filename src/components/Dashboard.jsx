@@ -205,7 +205,7 @@ export default function Dashboard() {
       certData = JSON.parse(item.qr_text);
       // Add extra fields from item if not present in qr_text
       certData.qrImageUrl = item.qr_image_url || '';
-      certData.directorName = certData.directorName || "M.Z.NURULLAYEVA";
+      certData.directorName = certData.director || certData.directorName || "M.Z.NURULLAYEVA";
       certData.certificateNumber = certData.certificateNumber || (item.description ? item.description.replace('Sertifikat: ', '') : '');
     } catch (e) {
       // Fallback: old text format

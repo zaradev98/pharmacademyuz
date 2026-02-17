@@ -329,6 +329,19 @@ export default function CertificateGenerator() {
                   onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
                 />
               </div>
+              <div style={{ gridColumn: '1 / -1' }}>
+                <label style={labelStyle}>Direktor F.I.SH</label>
+                <input
+                  type="text"
+                  value={formData.director}
+                  onChange={(e) => setFormData({ ...formData, director: e.target.value })}
+                  placeholder="M.Z.NURULLAYEVA"
+                  disabled={loading}
+                  style={inputStyle}
+                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+                />
+              </div>
             </div>
           </div>
 
