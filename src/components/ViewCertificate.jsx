@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -9,6 +9,8 @@ import { jsPDF } from 'jspdf';
 // }
 export default function ViewCertificate({ data = {}, onClose }) {
   const certificateRef = useRef(null);
+  const nameRef = useRef(null);
+  const [nameScale, setNameScale] = useState(1);
 
   // Agar data prop bo'sh bo'lsa, localStorage'dan o'qib olamiz
   let localData = {};
@@ -43,6 +45,18 @@ export default function ViewCertificate({ data = {}, onClose }) {
     qrImageUrl: source.qr_image_url || source.qrImageUrl || '',
   };
   
+  useEffect(() => {
+    if (nameRef.current) {
+      const containerWidth = 2143;
+      const textWidth = nameRef.current.scrollWidth;
+      if (textWidth > containerWidth) {
+        setNameScale(containerWidth / textWidth);
+      } else {
+        setNameScale(1);
+      }
+    }
+  }, [formData.fullName]);
+
   const formatQRText = () => {
     // Diplom raqamini encode qilib, qisqa URL yasaymiz
     if (formData.diplomNumber) {
@@ -363,15 +377,26 @@ export default function ViewCertificate({ data = {}, onClose }) {
               right: '700px',
               textAlign: 'center',
               borderBottom: '10px solid #000',
+              overflow: 'visible',
+              display: 'flex',
+              justifyContent: 'center',
             }}>
-              <h2 style={{
-                fontSize: '105px',
-                fontWeight: '900',
-                color: '#000',
-                textTransform: 'uppercase',
-                letterSpacing: '2px',
-                lineHeight: '1'
-              }}>
+              <h2
+                ref={nameRef}
+                style={{
+                  fontSize: '105px',
+                  fontWeight: '900',
+                  color: '#000',
+                  marginBottom:'20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '2px',
+                  lineHeight: '1',
+                  whiteSpace: 'nowrap',
+                  display: 'inline-block',
+                  transformOrigin: 'center center',
+                  transform: `scaleX(${nameScale})`,
+                }}
+              >
                 {formData.fullName}
               </h2>
             </div>
