@@ -1,12 +1,3 @@
-import CertificateGenerator from './components/CertificateGenerator'
-          <Route
-            path="/certificate-generator"
-            element={
-              <ProtectedRoute>
-                <CertificateGenerator />
-              </ProtectedRoute>
-            }
-          />
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './AuthContext'
 
@@ -16,7 +7,10 @@ import Profile from './components/Profile'
 import UserManagement from './components/UserManagement'
 import ProtectedRoute from './components/ProtectedRoute'
 import ViewCertificateWrapper from './components/ViewCertificateWrapper'
+import CertificateGenerator from './components/CertificateGenerator'
+import QrGenerator from './components/QrGenerator'
 import PublicViewPage from './pages/PublicViewPage'
+import QrPublicView from './pages/QrPublicView'
 import './App.css'
 
 function App() {
@@ -67,9 +61,18 @@ function App() {
             }
           />
           <Route
+            path="/qr-generator"
+            element={
+              <ProtectedRoute>
+                <QrGenerator />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/view"
             element={<PublicViewPage />}
           />
+          <Route path="/:id" element={<QrPublicView />} />
         </Routes>
       </Router>
     </AuthProvider>

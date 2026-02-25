@@ -383,8 +383,11 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="history-actions">
-              <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create" >
-               +YANGI SERTIFIKAT
+              <button onClick={() => navigate('/certificate-generator')} className="btn-qr-create">
+                +YANGI SERTIFIKAT
+              </button>
+              <button onClick={() => navigate('/qr-generator')} className="btn-qr-create">
+                +YANGI QR CODE
               </button>
               <input
                 type="text"
